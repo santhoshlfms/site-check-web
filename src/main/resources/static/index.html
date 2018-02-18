@@ -1,0 +1,356 @@
+
+
+<!DOCTYPE html>
+<html>
+	<head>
+		
+		<title>PayPal</title>
+		<meta content="text/html;charset=utf-8" http-equiv="Content-Type">
+		<meta content="utf-8" http-equiv="encoding">
+	    <meta name="viewport" content="width=device-width, initial-scale=1">
+		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+				
+		
+		<style type="text/css">
+		
+				.navbar-inverse {
+					    height:50px!important;
+					    border-color: #04befe !important;
+					    background-color: #009cde !important;
+   					    background-image: radial-gradient(circle farthest-side at center bottom,#009cde,#003087 125%);
+					}
+					
+					.content-wrapper {
+					    padding: 2rem 1.5rem;
+					}
+						
+					.mb-4, .my-4 {
+					    margin-bottom: 1.5rem!important;
+					}
+					.card-title {
+					    margin-bottom: .75rem;
+					}
+					
+					textarea {
+					  padding: 10px;
+					  font: 20px/28px 'Open Sans', sans-serif;
+					  letter-spacing: 1px;
+					  border:none
+					}
+					textarea:focus{
+					    border: 0 none #FFF;
+					    overflow: hidden;
+					    outline:none;
+					}
+					.forms-sample {
+					    display: flex;
+					    flex-wrap: wrap;
+					    margin-right: 20px;
+					    margin-left: 20px;
+					}
+					
+					.tag {
+					  font-size: 14px;
+					  padding: .3em .4em .4em;
+					  margin: 0 .1em;
+					  background-color: #003087;
+					  border-radius:0px;
+					  color: #fff;
+					  margin-left:10px;
+					  /* box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22); */
+					}
+					.tag a {
+					  color: #fff;
+					  cursor: pointer;
+					  opacity: 0.6;
+					}
+					.tag a:hover {
+					  opacity: 1.0
+					}
+					.tag .remove {
+					  vertical-align: bottom;
+					  top: 0;
+					}
+					.tag a {
+					  margin: 0 0 0 .3em;
+					}
+					.tag a .glyphicon-white {
+					  color: #fff;
+					  margin-bottom: 2px;
+					}
+					.boxShadow {
+						box-shadow: 0 19px 30px rgba(0,0,0,0.30), 0 2px 2px rgba(0,0,0,0.22);
+					}
+					
+					<!--Loader -->					
+					.loading { margin: auto; }
+
+					.loading span {
+					  line-height: 32px;
+					  margin-left: 12px;
+					  font-size: 16px;
+					  vertical-align: middle;
+					}
+					
+					.loading img { vertical-align: middle; }
+					
+					.loading_wrp {
+					  background-color: #FFF;
+					  display: block;
+					  height: 100%;
+					  left: 0;
+					  opacity: 0.5;
+					  filter: alpha(opacity=50);
+					  position: absolute;
+					  top: 0;
+					  width: 100%;
+					  z-index: 1020;
+					}
+					
+					.loading_wrp .x16 span {
+					  line-height: 16px;
+					  font-size: 12px;
+					  margin-left: 6px;
+					}
+					
+					.loading_wrp .x32 img {
+					  width: 32px;
+					  height: 32px;
+					}
+		</style>
+		
+	</head>
+	<body>
+	<nav class="navbar navbar-default navbar-inverse col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+      <div class="bg-white text-center navbar-brand-wrapper">
+       <a class="navbar-brand" href="#" style="margin-left:20px">
+       	<img alt="Brand" height="30" src="https://www.paypalobjects.com/webstatic/i/logo/rebrand/ppcom-white.svg" width="90">
+      </a>
+      </div>
+    </nav>
+    
+    
+    
+    <div class="container-fluid" style="margin-top:70px">
+    	<div class="content-wrapper">
+    		
+    		 <div class="row">
+    		 	
+			    <div class="col">
+				     <div class="card boxShadow">
+		                <div class="card-body">
+		                  <h5 class="card-title mb-4"></h5>
+		                	<textarea rows="10" id="urllist" cols="70" ></textarea> 
+		                </div>
+	              	</div>	
+			    </div>
+			    <div class="card col boxShadow">
+			     	<div class="row">
+			     		<div class="col-xl-12">
+			     			<div class="card-statistics">
+					                <div class="card-body">
+					                  <div class="forms-sample">
+					                  		<div class="form-group">
+						                  		<div class="row">
+						                  		<form class="form-inline">
+						                  			<div class="col-sm-10" style="margin-top:30px">
+						                  				<input type="email"  class="form-control p-input" id="tags" aria-describedby="emailHelp" placeholder="Enter Tag">
+							                    	</div>
+							                    	<div class="col-sm-2" style="margin-top:30px">
+						                  				<button type="button" class="btn btn-outline-primary " id="add-tag">+</button>
+						                  	      	</div>
+						                  	      </form>	
+						                  		</div>
+						                    </div>
+						               </div>
+				               		 </div>
+				              	</div>
+				     		</div>
+				     	</div>	
+				     	<div class="col">
+				     		<div class="row">
+				     			<div class="col">
+				     				<div id="tagList">
+				     					
+				     				</div>		
+				     			</div>	
+				     		</div>
+				     		
+				     		<div class="row" style="margin-top:50px">
+				     			<div class="col">
+				     				<div>
+				     					<button type="button" data-toggle="tooltip" data-placement="top" title="Enter Urls and Click search" class="btn btn-outline-primary " id="validate">Search <i class="fa fa-search-plus"></i></button>
+				     				</div>		
+				     			</div>	
+				     		</div>
+				     	</div>
+				    </div>
+				  </div>
+				  
+				  <div class="row boxShadow" style="margin-top:50px" id="tableSection">
+			  		<div class="col">
+			  				<div class="float-right">Download csv: <a href="download-csv">output.csv</a></div>
+			  				<div class="card" id="table-data" style="margin-top:50px;margin-bottom:20px" style="display:none">
+			  					<div >
+			  						<table class="table">
+									  <thead>
+									    <tr>
+									      <th>#</th>
+									      <th>Site url</th>
+									      <th>Acessable ?</th>
+									      <th>Tag Details</th>
+									    </tr>
+									  </thead>
+									  <tbody id="tableData">
+									   
+									  </tbody>
+									</table>
+			  					</div>
+			  				</div>
+			  		</div>
+				  </div>
+				  
+				  </div>
+			</div>
+
+    
+	<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
+
+	<script
+	  src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+	  <script src="/jquery-loader.js"></script>
+	<script type="text/javascript">
+	
+		var loaderData = {
+            autoCheck: false,
+        };
+
+		var predefinedTags = ['paypal','aliexpress']
+		var _template = "<span class='tag label label-info'><span>Example Tag</span><a><i class='fa fa-close'></i></a></span>"
+		
+		var addTagToList = function(name, index) {
+			return "<span class='tag label label-info'><span>"+name+"</span><a href='javascript:void(0)' onClick='removeTag("+index+")'><i class='fa fa-close'></i></a></span>"
+		}
+		
+		var loadPredifinedTags = function() {
+			$('#tagList').html("");
+			for(var i in predefinedTags) {
+				var _template = addTagToList(predefinedTags[i], i);
+				$('#tagList').append(_template)
+			}
+		}
+			
+		function removeTag(index) {
+			predefinedTags.splice(index, 1);
+			loadPredifinedTags();
+		}
+		
+		function disableSearch(){
+			if($("#urllist").val().length <=0) {
+				$('#validate').addClass('disabled');
+			}else {
+				$('#validate').removeClass('disabled');
+			}
+		}
+		
+		function constructTable(data) {
+			$("#tableData").html("")
+			var counter = 0;
+			var template = "";
+			var rows = ""
+			var siteData = data.siteDto
+			for(var i in siteData) {
+				var temp = "";
+				var tagData = data.siteDto[i].tags
+				for(var j in tagData) {
+					 var outcome = tagData[j].present ? "<span class='badge badge-success'>Present</span>" : "<span class='badge badge-danger'>Not Available</span>"
+					 temp += "<b>"+tagData[j].tagName +"</b> - " + outcome + ", "
+				}
+				counter++; 
+				template = "<tr><th scope='row'>"+counter+"</th><td><a target='_blank' href='"+siteData[i].siteName+"'>"+siteData[i].siteName+"</a></td><td><span class='badge badge-success'>YES</span></td><td>"+temp.replace(/,\s*$/, "");+"</td></tr>";
+				rows+=template;
+			}
+			
+			var invalidUrl = data.listOfInvalidUrl
+			for(var i in invalidUrl) {
+				counter++
+				template = "<tr><th scope='row'>"+counter+"</th><td><a target='_blank' href='"+siteData[i].siteName+"'>"+siteData[i].siteName+"</a></td><td><span class='badge badge-danger'>NO</span></td><td></td></tr>";
+				rows+=template;
+			}
+			
+			// append 
+			
+			$("#tableData").append(rows)
+			$("#tableSection").show();
+		}
+		
+		$(document).ready(function(){
+			
+			$("#tags").keyup(function(event) {
+			    if (event.keyCode === 13) {
+			        $("#add-tag").click();
+			    }
+			});
+			
+			// hide table section at start 
+			$("#tableSection").hide();
+			
+			$('#urllist').bind('input propertychange', function() {
+				disableSearch();
+			});
+			
+			if($("#urllist").val().length <=0) {
+				$('#validate').addClass('disabled');
+			}else {
+				$('#validate').removeClass('disabled');
+			}
+			
+			 $("#add-tag").on('click', function(e){
+				var tag = $('#tags').val();
+				if(predefinedTags.indexOf(tag) == -1) {
+					predefinedTags.push(tag);
+					loadPredifinedTags();	
+				}
+				$('#tags').val("");
+			}) 
+			
+			$('#validate').on('click', function(e){
+				 
+				 e.preventDefault();
+				 $("#tableSection").hide();
+				 $.loader.open(loaderData); // loader
+				 $('#validate').addClass('disabled');
+				 var url = "/read-urls";
+				 var data = {
+					"urls":$("#urllist").val(),
+					"tags":predefinedTags.toString()
+				 }
+				 $('.progress-bar').width('50%');
+				 $("#tableData").html("")
+
+				  $.ajax({
+					    url: url,
+					    type: "POST",
+					    data: JSON.stringify(data),
+					    contentType: "application/json",
+					    success: function(resp){
+					    	$('#validate').removeClass('disabled');
+					    	$.loader.close(true);
+					    	
+					    	//construct table
+					    	constructTable(resp)
+					    }
+					}); 
+				
+				})
+				loadPredifinedTags();
+			})
+			
+			
+	</script>
+	</body>
+</html>

@@ -1,0 +1,13 @@
+SITE URL,TAG NAME,IS TAG FOUND
+" "," "," "
+" ",paypal,paypal is not present
+" ",string,string is not present
+" ",config,config is not present
+" "," "," "
+" ",paypal,paypal is not present
+" ",string,string is present
+" ",config,config is present
+" "," "," "
+" ",paypal,paypal is present
+" ",string,string is not present
+" ",config,config is not present
