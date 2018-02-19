@@ -44,14 +44,14 @@ public class ReadandProcessUrlsControllers {
 	
 	@RequestMapping(value="/read-urls", method=RequestMethod.POST)
 	public ResultsDto readUrls(@RequestBody InputDataDto data, HttpServletResponse response) throws IOException, ConnectionException {
-		List<String> urlList = Arrays.asList(data.getUrls().split(",[ ]*"));
+		String url = data.getUrls();
 		List<String> tagList = Arrays.asList(data.getTags().split(",[ ]*"));
-		ResultsDto result = crawlData(urlList, tagList);
+		ResultsDto result = crawlData(url, tagList);
 		return result;
 	}
 	
-	@RequestMapping(value="/download-csv", method=RequestMethod.GET)
-	public ResponseEntity<Resource> download(String param) throws IOException {
+	@RequestMapping(value="/download-csv", method=RequestMethod.POST)
+	public ResponseEntity<Resource> download() throws IOException {
 		File file = new File(outputPath);
 		Path path = Paths.get(file.getAbsolutePath());
 	    ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
@@ -65,16 +65,16 @@ public class ReadandProcessUrlsControllers {
 	}
 	
 	
-	public ResultsDto crawlData(List<String> urlList, List<String> tagList) throws IOException {
+	public ResultsDto crawlData(String urlList, List<String> tagList) throws IOException {
 		Document doc = null;
 		List<String> listOfInvalidUrl = new ArrayList<>();
 	
 		HashMap<String, ArrayList<TagsData>> csvData = new HashMap<String, ArrayList<TagsData>>(); 
 	
-		for(String url : urlList) {
+		//for(String url : urlList) {
 			//1. check if url has protocol, if not add http:// as default
-			String urlWithProtocol = checkForProtocol(url.trim());
-			System.out.println("1 :" +urlWithProtocol);
+			String urlWithProtocol = checkForProtocol(urlList.trim());
+			//System.out.println("1 :" +urlWithProtocol);
 			//2. connect via jsoup and crawl data
 			try {
 				doc = Jsoup.connect(urlWithProtocol).timeout(10 * 2000).userAgent("Mozilla").get();
@@ -88,14 +88,16 @@ public class ReadandProcessUrlsControllers {
 					TagsData tagdata = new TagsData(tag, convertedNodes.indexOf(tag) > -1);
 					tagsData.add(tagdata);
 				}
-				csvData.put(urlWithProtocol, tagsData);
 				
+				csvData.put(urlWithProtocol, tagsData);
+				System.out.println(urlWithProtocol + " accessed");
 				
 			} catch (Exception e) {
 				listOfInvalidUrl.add(urlWithProtocol);
+				System.out.println( urlWithProtocol + " Not accessed == " + e.getMessage());
 				//e.printStackTrace();
 			}
-		}
+		//}
 		//5. write the hashmap to csv file and download it --- Writing valid URL's First 
 	
 		BufferedWriter writer = Files.newBufferedWriter(Paths.get(outputPath)); 
@@ -108,15 +110,15 @@ public class ReadandProcessUrlsControllers {
 			ArrayList<TagsData> tagsData = (ArrayList<TagsData>) item.getValue();
 	        SiteDto siteDto = new SiteDto(url, tagsData);
 	        listSiteDto.add(siteDto);
-			writeToCsv(writer, csvPrinter, url, " ", " ");
+			//writeToCsv(writer, csvPrinter, url, " ", " ");
 			if(tagsData.size() > 0) {
 				for(TagsData tag: tagsData) {
-					writeToCsv(writer, csvPrinter, "", tag.getTagName(), tag.value());
+					//writeToCsv(writer, csvPrinter, "", tag.getTagName(), tag.value());
 				}
 			}
 			
 		}
-		csvPrinter.flush();            
+		//csvPrinter.flush();            
         ResultsDto dto = new ResultsDto(listOfInvalidUrl, listSiteDto);
         return dto;
 		

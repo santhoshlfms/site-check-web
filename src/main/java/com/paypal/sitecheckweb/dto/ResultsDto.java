@@ -7,12 +7,13 @@ public class ResultsDto {
 	private List<String> listOfInvalidUrl;
 	private List<SiteDto> siteDto;
 	
+	
+	
 	public ResultsDto(List<String> listOfInvalidUrl, List<SiteDto> siteDto) {
 		super();
 		this.listOfInvalidUrl = listOfInvalidUrl;
 		this.siteDto = siteDto;
 	}
-	
 	public List<String> getListOfInvalidUrl() {
 		return listOfInvalidUrl;
 	}
@@ -26,12 +27,6 @@ public class ResultsDto {
 		this.siteDto = siteDto;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
+		
 	
 }

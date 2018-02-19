@@ -15,204 +15,209 @@
 		
 		<style type="text/css">
 		
-				.navbar-inverse {
-					    height:50px!important;
-					    border-color: #04befe !important;
-					    background-color: #009cde !important;
-   					    background-image: radial-gradient(circle farthest-side at center bottom,#009cde,#003087 125%);
-					}
-					
-					.content-wrapper {
-					    padding: 2rem 1.5rem;
-					}
-						
-					.mb-4, .my-4 {
-					    margin-bottom: 1.5rem!important;
-					}
-					.card-title {
-					    margin-bottom: .75rem;
-					}
-					
-					textarea {
-					  padding: 10px;
-					  font: 20px/28px 'Open Sans', sans-serif;
-					  letter-spacing: 1px;
-					  border:none
-					}
-					textarea:focus{
-					    border: 0 none #FFF;
-					    overflow: hidden;
-					    outline:none;
-					}
-					.forms-sample {
-					    display: flex;
-					    flex-wrap: wrap;
-					    margin-right: 20px;
-					    margin-left: 20px;
-					}
-					
-					.tag {
-					  font-size: 14px;
-					  padding: .3em .4em .4em;
-					  margin: 0 .1em;
-					  background-color: #003087;
-					  border-radius:0px;
-					  color: #fff;
-					  margin-left:10px;
-					  /* box-shadow: 0 19px 38px rgba(0,0,0,0.30), 0 15px 12px rgba(0,0,0,0.22); */
-					}
-					.tag a {
-					  color: #fff;
-					  cursor: pointer;
-					  opacity: 0.6;
-					}
-					.tag a:hover {
-					  opacity: 1.0
-					}
-					.tag .remove {
-					  vertical-align: bottom;
-					  top: 0;
-					}
-					.tag a {
-					  margin: 0 0 0 .3em;
-					}
-					.tag a .glyphicon-white {
-					  color: #fff;
-					  margin-bottom: 2px;
-					}
-					.boxShadow {
-						box-shadow: 0 19px 30px rgba(0,0,0,0.30), 0 2px 2px rgba(0,0,0,0.22);
-					}
-					
-					<!--Loader -->					
-					.loading { margin: auto; }
+				  .navbar-inverse {
+              height:50px!important;
+              border-color: #04befe !important;
+              background-color: #009cde !important;
+                background-image: radial-gradient(circle farthest-side at center bottom,#009cde,#003087 125%);
+          }
+          
+          .content-wrapper {
+              padding: 2rem 1.5rem;
+          }
+            
+          .mb-4, .my-4 {
+              margin-bottom: 1.5rem!important;
+          }
+          .card-title {
+              margin-bottom: .75rem;
+          }
+          
+          textarea {
+            padding: 10px;
+            font: 20px/28px 'Open Sans', sans-serif;
+            letter-spacing: 1px;
+            border:none;
+            width:100%;
+          }
+          textarea:focus{
+              border: 0 none #FFF;
+              overflow: hidden;
+              outline:none;
+          }
+          .forms-sample {
+              display: flex;
+              flex-wrap: wrap;
+              margin-right: 20px;
+              margin-left: 20px;
+          }
+          
+          .tag {
+            font-size: 14px;
+            padding: .3em .4em .4em;
+            margin: 0 .1em;
+            background-color: #003087;
+            border-radius:0px;
+            color: #fff;
+            margin-left:10px;
+            display: inline-block;
+            margin-top: 10px;
+          }
+          .tag a {
+            color: #fff;
+            cursor: pointer;
+            opacity: 0.6;
+          }
+          .tag a:hover {
+            opacity: 1.0
+          }
+          .tag .remove {
+            vertical-align: bottom;
+            top: 0;
+          }
+          .tag a {
+            margin: 0 0 0 .3em;
+          }
+          .tag a .glyphicon-white {
+            color: #fff;
+            margin-bottom: 2px;
+          }
+          .boxShadow {
+            box-shadow: 0 19px 30px rgba(0,0,0,0.30), 0 2px 2px rgba(0,0,0,0.22);
+          }
+          
+          <!--Loader -->          
+          .loading { margin: auto; }
 
-					.loading span {
-					  line-height: 32px;
-					  margin-left: 12px;
-					  font-size: 16px;
-					  vertical-align: middle;
-					}
-					
-					.loading img { vertical-align: middle; }
-					
-					.loading_wrp {
-					  background-color: #FFF;
-					  display: block;
-					  height: 100%;
-					  left: 0;
-					  opacity: 0.5;
-					  filter: alpha(opacity=50);
-					  position: absolute;
-					  top: 0;
-					  width: 100%;
-					  z-index: 1020;
-					}
-					
-					.loading_wrp .x16 span {
-					  line-height: 16px;
-					  font-size: 12px;
-					  margin-left: 6px;
-					}
-					
-					.loading_wrp .x32 img {
-					  width: 32px;
-					  height: 32px;
-					}
+          .loading span {
+            line-height: 32px;
+            margin-left: 12px;
+            font-size: 16px;
+            vertical-align: middle;
+          }
+          
+          .loading img { vertical-align: middle; }
+          
+          .loading_wrp {
+            background-color: #FFF;
+            display: block;
+            height: 100%;
+            left: 0;
+            opacity: 0.5;
+            filter: alpha(opacity=50);
+            position: absolute;
+            top: 0;
+            width: 100%;
+            z-index: 1020;
+          }
+          
+          .loading_wrp .x16 span {
+            line-height: 16px;
+            font-size: 12px;
+            margin-left: 6px;
+          }
+          
+          .loading_wrp .x32 img {
+            width: 32px;
+            height: 32px;
+          }
+
+          .form-group {
+            width: 100% !important;
+        }
 		</style>
 		
 	</head>
 	<body>
-	<nav class="navbar navbar-default navbar-inverse col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
-      <div class="bg-white text-center navbar-brand-wrapper">
-       <a class="navbar-brand" href="#" style="margin-left:20px">
+	    <nav class="navbar navbar-default navbar-inverse col-lg-12 col-12 p-0 fixed-top d-flex flex-row">
+   <div class="bg-white text-center navbar-brand-wrapper">
+      <a class="navbar-brand" href="#" style="margin-left:20px">
       </a>
+   </div>
+</nav>
+<div class="container-fluid" style="margin-top:70px">
+   <div class="content-wrapper">
+      <div class="row">
+         <div class="col-sm-6">
+            <div class="card boxShadow">
+               <div class="card-body">
+                  <h5 class="card-title mb-4"></h5>
+                  <textarea rows="10" id="urllist" cols="10" ></textarea>
+               </div>
+            </div>
+         </div>
+         <div class="col-sm-6">
+            <div class="card boxShadow">
+               <div class="card-statistics">
+                  <div class="card-body">
+                     <div class="forms-sample">
+                        <div class="form-group">
+                           <form class="form-inline">
+                              <div class="row" style="margin-top:30px">
+                                 <div class="col-sm-10 col-xs-4" >
+                                    <input type="tag"  class="form-control mb-2 mr-sm-2 mb-sm-0" id="tags"  placeholder="Enter Tag">
+                                 </div>
+                                 <div class="col-sm-2" style="margin-left: -20px">
+                                    <button type="button" class="btn btn-outline-primary " id="add-tag">+</button>
+                                 </div>
+                              </div>
+                           </form>
+                           <div class="row" style="margin-top:30px">
+                              <div class="col">
+                                 <div id="tagList">
+                                 </div>
+                              </div>
+                           </div>
+                           <div class="row" style="margin-top:50px">
+                              <div class="col">
+                                 <div>
+                                    <button type="button" data-toggle="tooltip" data-placement="top" title="Enter Urls and Click search" class="btn btn-outline-primary " id="validate">Search <i class="fa fa-search-plus"></i></button>
+                                 </div>
+                              </div>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+               </div>
+            </div>
+         </div>
       </div>
-    </nav>
-    
-    
-    
-    <div class="container-fluid" style="margin-top:70px">
-    	<div class="content-wrapper">
-    		
-    		 <div class="row">
-    		 	
-			    <div class="col">
-				     <div class="card boxShadow">
-		                <div class="card-body">
-		                  <h5 class="card-title mb-4"></h5>
-		                	<textarea rows="10" id="urllist" cols="70" ></textarea> 
-		                </div>
-	              	</div>	
-			    </div>
-			    <div class="card col boxShadow">
-			     	<div class="row">
-			     		<div class="col-xl-12">
-			     			<div class="card-statistics">
-					                <div class="card-body">
-					                  <div class="forms-sample">
-					                  		<div class="form-group">
-						                  		<div class="row">
-						                  		<form class="form-inline">
-						                  			<div class="col-sm-10" style="margin-top:30px">
-						                  				<input type="email"  class="form-control p-input" id="tags" aria-describedby="emailHelp" placeholder="Enter Tag">
-							                    	</div>
-							                    	<div class="col-sm-2" style="margin-top:30px">
-						                  				<button type="button" class="btn btn-outline-primary " id="add-tag">+</button>
-						                  	      	</div>
-						                  	      </form>	
-						                  		</div>
-						                    </div>
-						               </div>
-				               		 </div>
-				              	</div>
-				     		</div>
-				     	</div>	
-				     	<div class="col">
-				     		<div class="row">
-				     			<div class="col">
-				     				<div id="tagList">
-				     					
-				     				</div>		
-				     			</div>	
-				     		</div>
-				     		
-				     		<div class="row" style="margin-top:50px">
-				     			<div class="col">
-				     				<div>
-				     					<button type="button" data-toggle="tooltip" data-placement="top" title="Enter Urls and Click search" class="btn btn-outline-primary " id="validate">Search <i class="fa fa-search-plus"></i></button>
-				     				</div>		
-				     			</div>	
-				     		</div>
-				     	</div>
-				    </div>
-				  </div>
-				  
-				  <div class="row boxShadow" style="margin-top:50px" id="tableSection">
-			  		<div class="col">
-			  				<div class="float-right">Download csv: <a href="download-csv">output.csv</a></div>
-			  				<div class="card" id="table-data" style="margin-top:50px;margin-bottom:20px" style="display:none">
-			  					<div >
-			  						<table class="table">
-									  <thead>
-									    <tr>
-									      <th>#</th>
-									      <th>Site url</th>
-									      <th>Acessable ?</th>
-									      <th>Tag Details</th>
-									    </tr>
-									  </thead>
-									  <tbody id="tableData">
-									   
-									  </tbody>
-									</table>
-			  					</div>
-			  				</div>
-			  		</div>
-				  </div>
-				  
-				  </div>
-			</div>
+      <div class="row boxShadow" style="margin-top:50px" id="tableSection">
+         <div class="col">
+            <div class="float-right showDownloadSection">Download csv: <a href="javascript:void(0)" onclick="downloadCSV()">output.csv</a></div>
+            <div class="card" id="table-data" style="margin-top:50px;margin-bottom:20px" style="display:none">
+               <div >
+                  <table class="table">
+                     <thead>
+                        <tr>
+                           <th>#</th>
+                           <th>Site url</th>
+                           <th>Acessable ?</th>
+                           <th>Tag Details</th>
+                        </tr>
+                     </thead>
+                     <tbody id="tableData">
+                     </tbody>
+                  </table>
+               </div>
+               
+                
+             
+            </div>
+             <div class="row showDownloadSection">
+               		<div class="col align-self-center card">
+					  <div class="card-block">
+					    <h4 class="card-title">Complete !</h4>
+					    <p class="card-text">Download the above result in CSV format.</p>
+					    <a href="javascript:void(0)" class="btn btn-primary" onclick="downloadCSV()">Download</a>
+					  </div>
+					</div>
+               </div>
+         </div>
+      </div>
+   </div>
+</div>
+
 
     
 	<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
@@ -227,6 +232,9 @@
 		var loaderData = {
             autoCheck: false,
         };
+		var validUrlListResults = [];
+		var inValidUrlListResults = [];
+		var csvData = [];
 
 		var predefinedTags = ['paypal','aliexpress']
 		var _template = "<span class='tag label label-info'><span>Example Tag</span><a><i class='fa fa-close'></i></a></span>"
@@ -242,6 +250,78 @@
 				$('#tagList').append(_template)
 			}
 		}
+		function JSONToCSVConvertor(JSONData, ReportTitle, ShowLabel) {
+		    //If JSONData is not an object then JSON.parse will parse the JSON string in an Object
+		    var arrData = typeof JSONData != 'object' ? JSON.parse(JSONData) : JSONData;
+		    
+		    var CSV = '';    
+		    //Set Report title in first row or line
+		    
+		    CSV += ReportTitle + '\r\n\n';
+
+		    //This condition will generate the Label/Header
+		    if (ShowLabel) {
+		        var row = "";
+		        
+		        //This loop will extract the label from 1st index of on array
+		        for (var index in arrData[0]) {
+		            
+		            //Now convert each value to string and comma-seprated
+		            row += index + ',';
+		        }
+
+		        row = row.slice(0, -1);
+		        
+		        //append Label row with line break
+		        CSV += row + '\r\n';
+		    }
+		    
+		    //1st loop is to extract each row
+		    for (var i = 0; i < arrData.length; i++) {
+		        var row = "";
+		        
+		        //2nd loop will extract each column and convert it in string comma-seprated
+		        for (var index in arrData[i]) {
+		            row += '"' + arrData[i][index] + '",';
+		        }
+
+		        row.slice(0, row.length - 1);
+		        
+		        //add a line break after each row
+		        CSV += row + '\r\n';
+		    }
+
+		    if (CSV == '') {        
+		        alert("Invalid data");
+		        return;
+		    }   
+		    
+		    //Generate a file name
+		    var fileName = "Site_Accessible_";
+		    //this will remove the blank-spaces from the title and replace it with an underscore
+		    fileName += ReportTitle.replace(/ /g,"_");   
+		    
+		    //Initialize file format you want csv or xls
+		    var uri = 'data:text/csv;charset=utf-8,' + escape(CSV);
+		    
+		    // Now the little tricky part.
+		    // you can use either>> window.open(uri);
+		    // but this will not work in some browsers
+		    // or you will not get the correct file extension    
+		    
+		    //this trick will generate a temp <a /> tag
+		    var link = document.createElement("a");    
+		    link.href = uri;
+		    
+		    //set the visibility hidden so it will not effect on your web-layout
+		    link.style = "visibility:hidden";
+		    link.download = fileName + ".csv";
+		    
+		    //this part will append the anchor tag and remove it after automatic click
+		    document.body.appendChild(link);
+		    link.click();
+		    document.body.removeChild(link);
+		}
 			
 		function removeTag(index) {
 			predefinedTags.splice(index, 1);
@@ -255,39 +335,73 @@
 				$('#validate').removeClass('disabled');
 			}
 		}
-		
+		var counter = 0;
 		function constructTable(data) {
-			$("#tableData").html("")
-			var counter = 0;
+			//$("#tableData").html("")
 			var template = "";
 			var rows = ""
 			var siteData = data.siteDto
-			for(var i in siteData) {
-				var temp = "";
-				var tagData = data.siteDto[i].tags
-				for(var j in tagData) {
-					 var outcome = tagData[j].present ? "<span class='badge badge-success'>Present</span>" : "<span class='badge badge-danger'>Not Available</span>"
-					 temp += "<b>"+tagData[j].tagName +"</b> - " + outcome + ", "
+			if(siteData.length > 0) {
+				for(var i in siteData) {
+					var siteCsvData = {
+							"Url" : siteData[i].siteName
+					}
+					// push data for csv
+					validUrlListResults.push(siteData[i])
+					//csvData
+					var temp = "";
+					var tagData = data.siteDto[i].tags
+					for(var j in tagData) {
+						 var _outcome = tagData[j].present ? 'YES' : 'NO' 
+						 var outcome = tagData[j].present ? "<span class='badge badge-success'>Available</span>" : "<span class='badge badge-danger'>Not Available</span>"
+						 temp += "<b>"+tagData[j].tagName +"</b> - " + outcome + ", "
+						 siteCsvData[tagData[j].tagName] = _outcome
+					}
+					csvData.push(siteCsvData);
+					counter++; 
+					template = "<tr><th scope='row'>"+counter+"</th><td><a target='_blank' href='"+siteData[i].siteName+"'>"+siteData[i].siteName+"</a></td><td><span class='badge badge-success'>YES</span></td><td>"+temp.replace(/,\s*$/, "");+"</td></tr>";
+					rows+=template;
 				}
-				counter++; 
-				template = "<tr><th scope='row'>"+counter+"</th><td><a target='_blank' href='"+siteData[i].siteName+"'>"+siteData[i].siteName+"</a></td><td><span class='badge badge-success'>YES</span></td><td>"+temp.replace(/,\s*$/, "");+"</td></tr>";
-				rows+=template;
+				
 			}
 			
+			
 			var invalidUrl = data.listOfInvalidUrl
-			for(var i in invalidUrl) {
-				counter++
-				template = "<tr><th scope='row'>"+counter+"</th><td><a target='_blank' href='"+siteData[i].siteName+"'>"+siteData[i].siteName+"</a></td><td><span class='badge badge-danger'>NO</span></td><td></td></tr>";
-				rows+=template;
+			if(invalidUrl.length >0) {
+				for(var i in invalidUrl) {
+					var siteCsvData = {
+						"Url" : invalidUrl[i]
+					}
+					csvData.push(siteCsvData);
+					// push data for csv
+					inValidUrlListResults.push(invalidUrl[i])
+					counter++
+					template = "<tr><th scope='row'>"+counter+"</th><td><a target='_blank' href='"+invalidUrl[i]+"'>"+invalidUrl[i]+"</a></td><td><span class='badge badge-danger'>NO</span></td><td></td></tr>";
+					rows+=template;
+				}
 			}
+			
 			
 			// append 
 			
 			$("#tableData").append(rows)
 			$("#tableSection").show();
+			window.scrollTo(0,document.body.scrollHeight);
+			console.log(siteCsvData)
+		}
+		
+		function downloadCSV() {
+			console.log(csvData)
+			 if(csvData == '' || csvData.length <=0)
+		          return;
+		     JSONToCSVConvertor(csvData, "Report", true);
 		}
 		
 		$(document).ready(function(){
+			
+			  $("form").submit(function(e){
+		          e.preventDefault();
+		      });
 			
 			$("#tags").keyup(function(event) {
 			    if (event.keyCode === 13) {
@@ -297,6 +411,7 @@
 			
 			// hide table section at start 
 			$("#tableSection").hide();
+			$('.showDownloadSection').hide();
 			
 			$('#urllist').bind('input propertychange', function() {
 				disableSearch();
@@ -318,32 +433,54 @@
 			}) 
 			
 			$('#validate').on('click', function(e){
-				 
+				csvData = [];
 				 e.preventDefault();
 				 $("#tableSection").hide();
-				 $.loader.open(loaderData); // loader
+				// $.loader.open(loaderData); // loader
 				 $('#validate').addClass('disabled');
 				 var url = "/read-urls";
-				 var data = {
-					"urls":$("#urllist").val(),
-					"tags":predefinedTags.toString()
-				 }
+				
 				 $('.progress-bar').width('50%');
 				 $("#tableData").html("")
-
-				  $.ajax({
-					    url: url,
-					    type: "POST",
-					    data: JSON.stringify(data),
-					    contentType: "application/json",
-					    success: function(resp){
-					    	$('#validate').removeClass('disabled');
-					    	$.loader.close(true);
-					    	
-					    	//construct table
-					    	constructTable(resp)
-					    }
-					}); 
+				 
+				 // one by one hit for faster retrivel of data 
+				 var urlList = $("#urllist").val().trim().split('\n')
+				 if(urlList.length > 0) {
+					 
+					 for (var i = 0; i < urlList.length; i++) (function(i) {
+						     // async processing
+											 
+						 $('#validate').addClass('disabled');
+						 var data = {
+							"urls":urlList[i],
+							"tags":predefinedTags.toString()
+						 }
+						 var isLast = false;
+						 if(i == urlList.length -1) {
+							 isLast = true;
+						 }
+						 counter = 0;
+							
+						  $.ajax({
+							    url: url,
+							    type: "POST",
+							    data: JSON.stringify(data),
+							    contentType: "application/json",
+							    success: function(resp){
+							    	//console.log(i + "==" + urlList.length)
+							    	if(isLast){
+							     		$('#validate').removeClass('disabled');
+							     		$('.showDownloadSection').show();
+										 //alert('last')   		
+							    	}
+							    	$.loader.close(true);
+							    	//construct table
+							    	constructTable(resp)
+							    }
+							}); 
+					 })(i);
+				 }
+				
 				
 				})
 				loadPredifinedTags();
