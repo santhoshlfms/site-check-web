@@ -10,6 +10,8 @@
 	    <meta name="viewport" content="width=device-width, initial-scale=1">
 		<link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+		<link rel="stylesheet" href="/bootstrap-multiselect.css">
+		
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
 				
 		
@@ -168,6 +170,38 @@
                                  </div>
                               </div>
                            </div>
+                           <div class="row" style="margin-top:30px">
+                              <div class="col">
+                                 <div id="checkList">
+                                 	  <div class="form-check">
+									    <div class="container">
+											<strong>Country :</strong>
+										    <select id="multiple-checkboxes" multiple="multiple">
+										        <option value="php" selected="selected">China</option>
+										        <option value="javascript">Japan</option>
+										        <option value="java">Usa</option>
+										        <option value="sql">England</option>
+										        <option value="jquery">India</option>
+										        <option value=".net">France</option>
+										    </select>
+										</div>
+									  </div>
+                                 	 <div class="form-check">
+                                 	 <div class="container">
+									    <input type="checkbox" class="form-check-input" id="gapi">
+									    <label class="form-check-label" for="gapi">Has google API’s</label>
+									    </div>
+									  </div>
+									  <div class="form-check">
+									  <div class="container">
+									    <input type="checkbox" class="form-check-input" id="gapi">
+									    <label class="form-check-label" for="gapi">	Baidu Compliance check</label>
+									    </div>
+									  </div>
+								
+                                 </div>
+                              </div>
+                           </div>
                            <div class="row" style="margin-top:50px">
                               <div class="col">
                                  <div>
@@ -227,6 +261,7 @@
 	<script
 	  src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 	  <script src="/jquery-loader.js"></script>
+	  <script src="/bootstrap-multiselect.js"></script>
 	<script type="text/javascript">
 	
 		var loaderData = {
@@ -236,11 +271,11 @@
 		var inValidUrlListResults = [];
 		var csvData = [];
 
-		var predefinedTags = ['paypal','aliexpress']
+		var predefinedTags = ['paypal','alipay','china','webinterpret']
 		var _template = "<span class='tag label label-info'><span>Example Tag</span><a><i class='fa fa-close'></i></a></span>"
 		
 		var addTagToList = function(name, index) {
-			return "<span class='tag label label-info'><span>"+name+"</span><a href='javascript:void(0)' onClick='removeTag("+index+")'><i class='fa fa-close'></i></a></span>"
+			return "<span class='tag label label-info'><span>"+name.toUpperCase()+"</span><a href='javascript:void(0)' onClick='removeTag("+index+")'><i class='fa fa-close'></i></a></span>"
 		}
 		
 		var loadPredifinedTags = function() {
@@ -398,6 +433,8 @@
 		}
 		
 		$(document).ready(function(){
+			
+			 $('#multiple-checkboxes').multiselect('select', 0);
 			
 			  $("form").submit(function(e){
 		          e.preventDefault();

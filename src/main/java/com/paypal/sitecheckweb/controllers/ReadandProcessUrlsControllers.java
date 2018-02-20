@@ -81,10 +81,12 @@ public class ReadandProcessUrlsControllers {
 				//3. url is valid and connected with jsoup now find the tags in dom
 				Elements findPayPalKeyWord = doc.select("body");
 				String convertedNodes = findPayPalKeyWord.toString();
+				convertedNodes = convertedNodes.toLowerCase();
 				
 				//4. finding if the above string has mentioned tags !
 				ArrayList<TagsData> tagsData = new ArrayList<>();
 				for(String tag: tagList) {
+					tag = tag.toLowerCase();
 					TagsData tagdata = new TagsData(tag, convertedNodes.indexOf(tag) > -1);
 					tagsData.add(tagdata);
 				}
