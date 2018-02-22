@@ -45,6 +45,7 @@ public class ReadandProcessUrlsControllers {
 		String url = data.getUrls();
 		List<String> tagList = new ArrayList(Arrays.asList(data.getTags().split(",[ ]*")));
 		ResultsDto result = crawlData(url, tagList);
+		log.info("RESPONSE SENT");
 		return result;
 	}
 
@@ -52,7 +53,8 @@ public class ReadandProcessUrlsControllers {
 
 		Document doc = null;
 		List<String> listOfInvalidUrl = new ArrayList<>();
-
+		String url = null;
+		ArrayList<String> chinaWebSite = null;
 		HashMap<String, ArrayList<TagsData>> csvData = new HashMap<String, ArrayList<TagsData>>();
 
 		// 1. check if url has protocol, if not add http:// as default
@@ -60,18 +62,19 @@ public class ReadandProcessUrlsControllers {
 		// get all links from the site
 		ArrayList<String> googleLinks = null;
 		HashSet<String> totalValidLinks = new HashSet<>();
+		try {
 		HashSet<String> links = getPageLinks(urlWithProtocol, 0, urlWithProtocol, totalValidLinks);
 
-		ArrayList<String> chinaWebSite = findChineseWebsites(links);
+		 chinaWebSite = findChineseWebsites(links);
 		
 		log.info("URL :" + urlWithProtocol);
 		log.info("VALID URLS :" + links.size());
 		
 		ArrayList<TagsData> tagsData = new ArrayList<>();
-		String url = null;
+		
 
 		// 2. connect via jsoup and crawl data
-		try {
+		
 			Iterator<String> it = links.iterator();
 			while (it.hasNext()) {
 				if (tagList.size() == 0) {
@@ -126,9 +129,9 @@ public class ReadandProcessUrlsControllers {
 			csvData.put(urlWithProtocol, tagsData);
 
 		} catch (Exception e) {
-			if (urlWithProtocol.equals(url)) {
+			//if (urlWithProtocol.equals(url)) {
 				listOfInvalidUrl.add(urlWithProtocol);
-			}
+			//}
 
 			// e.printStackTrace();
 			log.info(urlWithProtocol + " Not accessed == " + e.getMessage());
@@ -173,7 +176,7 @@ public class ReadandProcessUrlsControllers {
 		return chinaWebSite;
 	}
 
-	public HashSet<String> getPageLinks(String URL, int depth, String parentUrl, HashSet<String> links) {
+	public HashSet<String> getPageLinks(String URL, int depth, String parentUrl, HashSet<String> links) throws Exception  {
 		if (URL.length() > 0) {
 			int indexOfParam = StringUtils.ordinalIndexOf(URL, "/", 4);
 			if(indexOfParam > 0 ) {
@@ -210,6 +213,7 @@ public class ReadandProcessUrlsControllers {
 
 				} catch (Exception e) {
 					log.error("For '" + URL + "': " + e.getMessage());
+					throw e;
 				}
 			}
 		}
