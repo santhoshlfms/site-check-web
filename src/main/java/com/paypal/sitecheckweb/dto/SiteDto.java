@@ -7,12 +7,14 @@ public class SiteDto {
 	
 	private String siteName;
 	private ArrayList<TagsData> tags;
+	private ArrayList<String> chinaWebLinks;
+
 	
-	
-	public SiteDto(String siteName, ArrayList<TagsData> tags) {
+	public SiteDto(String siteName, ArrayList<TagsData> tags, ArrayList<String> chinaWebLinks) {
 		super();
 		this.siteName = siteName;
 		this.tags = tags;
+		this.setChinaWebLinks(chinaWebLinks);
 	}
 	
 	
@@ -27,6 +29,16 @@ public class SiteDto {
 	}
 	public void setTags(ArrayList<TagsData> tags) {
 		this.tags = tags;
+	}
+
+
+	public ArrayList<String> getChinaWebLinks() {
+		return chinaWebLinks;
+	}
+
+
+	public void setChinaWebLinks(ArrayList<String> chinaWebLinks) {
+		this.chinaWebLinks = chinaWebLinks;
 	}
 	
 	

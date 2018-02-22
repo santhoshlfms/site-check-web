@@ -126,7 +126,11 @@
 
           .form-group {
             width: 100% !important;
-        }
+          }
+          
+          
+        
+        
 		</style>
 		
 	</head>
@@ -144,12 +148,12 @@
             <div class="card boxShadow">
                <div class="card-body">
                   <h5 class="card-title mb-4"></h5>
-                  <textarea rows="10" id="urllist" cols="10" ></textarea>
+                  <textarea rows="12" id="urllist" cols="10" ></textarea>
                </div>
             </div>
          </div>
          <div class="col-sm-6">
-            <div class="card boxShadow">
+            <div class="card boxShadow" style="padding-bottom:5px">
                <div class="card-statistics">
                   <div class="card-body">
                      <div class="forms-sample">
@@ -205,7 +209,7 @@
                            <div class="row" style="margin-top:50px">
                               <div class="col">
                                  <div>
-                                    <button type="button" data-toggle="tooltip" data-placement="top" title="Enter Urls and Click search" class="btn btn-outline-primary " id="validate">Search <i class="fa fa-search-plus"></i></button>
+                                    <button type="button"  class="btn btn-outline-primary " id="validate">Search <i class="fa fa-search-plus"></i></button>
                                  </div>
                               </div>
                            </div>
@@ -222,13 +226,8 @@
             <div class="card" id="table-data" style="margin-top:50px;margin-bottom:20px" style="display:none">
                <div >
                   <table class="table">
-                     <thead>
-                        <tr>
-                           <th>#</th>
-                           <th>Site url</th>
-                           <th>Acessable ?</th>
-                           <th>Tag Details</th>
-                        </tr>
+                     <thead id="tableHeader">
+                       
                      </thead>
                      <tbody id="tableData">
                      </tbody>
@@ -254,12 +253,11 @@
 
 
     
-	<script src="https://code.jquery.com/jquery-3.1.1.slim.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+	
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js"></script>
-
-	<script
-	  src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
 	  <script src="/jquery-loader.js"></script>
 	  <script src="/bootstrap-multiselect.js"></script>
 	<script type="text/javascript">
@@ -386,15 +384,36 @@
 					//csvData
 					var temp = "";
 					var tagData = data.siteDto[i].tags
+					var labelCn = "CN Sites";
+			    	 //predefinedTags.push(labelCn)
+					 var headerList = predefinedTags.toString().split(',')
+				 	 var tempTd = "";
+				 	 for(var k in headerList) {
+				 		tempTd += "<td id='"+headerList[k]+"'>" + headerList[k].toUpperCase() + "</td>"
+				 	 }
+				 	 
+				 	 
 					for(var j in tagData) {
 						 var _outcome = tagData[j].present ? 'YES' : 'NO' 
-						 var outcome = tagData[j].present ? "<span class='badge badge-success'>Available</span>" : "<span class='badge badge-danger'>Not Available</span>"
-						 temp += "<b>"+tagData[j].tagName +"</b> - " + outcome + ", "
-						 siteCsvData[tagData[j].tagName] = _outcome
+						 var outcome = tagData[j].present ? "<span class='customTooltips' data-toggle='tooltip' data-placement='top' title='Found in:"+tagData[j].url+"'><i class='fa fa-check' style='color:green'></i></span>" : "<span><i class='fa fa-times' style='color:red'></i></span>"
+						 var tagName = tagData[j].tagName.toUpperCase();
+						 tempTd = tempTd.replace(tagName,outcome);
+						 
+						 if(tagData[j].tagName == "Google API") {
+							 siteCsvData[tagData[j].tagName] = _outcome + "-" + tagData[j].url.toString()
+						 }else {
+							 siteCsvData[tagData[j].tagName] = _outcome	 
+						 }
 					}
+					
+					// for cn sites
+					siteCsvData[labelCn] = 	data.siteDto[i].chinaWebLinks.toString(); 
+					
+					temp = tempTd;
+					
 					csvData.push(siteCsvData);
 					counter++; 
-					template = "<tr><th scope='row'>"+counter+"</th><td><a target='_blank' href='"+siteData[i].siteName+"'>"+siteData[i].siteName+"</a></td><td><span class='badge badge-success'>YES</span></td><td>"+temp.replace(/,\s*$/, "");+"</td></tr>";
+					template = "<tr><th scope='row'>"+counter+"</th><td><a target='_blank' href='"+siteData[i].siteName+"'>"+siteData[i].siteName+"</a></td><td><span class='badge badge-success'>YES</span></td>"+temp.replace(/,\s*$/, "");+"</tr>";
 					rows+=template;
 				}
 				
@@ -421,6 +440,7 @@
 			
 			$("#tableData").append(rows)
 			$("#tableSection").show();
+			$('[data-toggle="tooltip"]').tooltip();
 			window.scrollTo(0,document.body.scrollHeight);
 			console.log(siteCsvData)
 		}
@@ -435,7 +455,7 @@
 		$(document).ready(function(){
 			
 			 $('#multiple-checkboxes').multiselect('select', 0);
-			
+			 $('[data-toggle="tooltip"]').tooltip();
 			  $("form").submit(function(e){
 		          e.preventDefault();
 		      });
@@ -479,7 +499,7 @@
 				
 				 $('.progress-bar').width('50%');
 				 $("#tableData").html("")
-				 
+				 var  counterAjax = 0;
 				 // one by one hit for faster retrivel of data 
 				 var urlList = $("#urllist").val().trim().split('\n')
 				 if(urlList.length > 0) {
@@ -493,19 +513,33 @@
 							"tags":predefinedTags.toString()
 						 }
 						 var isLast = false;
-						 if(i == urlList.length -1) {
+						
+						 console.log(counterAjax,urlList.length )
+						 if(counterAjax == urlList.length -1 ) {
 							 isLast = true;
 						 }
-						 counter = 0;
-							
+						 
+						 //construct table header 
+						 $('#tableHeader').html("")
+
+					 	 var headerList = predefinedTags.toString().split(',')
+					 	 var tempTh = "";
+					 	 for(var i in headerList) {
+					 		tempTh += "<th>" + headerList[i].toUpperCase() + "</th>"
+					 	 }
+					 	 console.log(tempTh);
+					 	 var templateHeader = "<tr><th>#</th><th>Site url</th><th>Accessible ?</th>"+tempTh+"dynamicHeader</tr>"; 
+					 	 $('#tableHeader').append(templateHeader)
 						  $.ajax({
 							    url: url,
 							    type: "POST",
 							    data: JSON.stringify(data),
 							    contentType: "application/json",
 							    success: function(resp){
+							    	counterAjax++;
+							    	console.log(counterAjax);
 							    	//console.log(i + "==" + urlList.length)
-							    	if(isLast){
+    								 if(counterAjax == urlList.length ) {
 							     		$('#validate').removeClass('disabled');
 							     		$('.showDownloadSection').show();
 										 //alert('last')   		
