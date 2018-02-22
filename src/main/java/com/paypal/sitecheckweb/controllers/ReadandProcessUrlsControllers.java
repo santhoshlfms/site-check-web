@@ -15,6 +15,7 @@ import java.util.Map;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.csv.CSVPrinter;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.coyote.http2.ConnectionException;
 import org.apache.log4j.Logger;
 import org.jsoup.Jsoup;
@@ -58,12 +59,14 @@ public class ReadandProcessUrlsControllers {
 		String urlWithProtocol = checkForProtocol(urlList.trim());
 		// get all links from the site
 		ArrayList<String> googleLinks = null;
-		HashSet<String> link1s = new HashSet<>();
-		HashSet<String> links = getPageLinks(urlWithProtocol, 0, urlWithProtocol, link1s);
+		HashSet<String> totalValidLinks = new HashSet<>();
+		HashSet<String> links = getPageLinks(urlWithProtocol, 0, urlWithProtocol, totalValidLinks);
 
 		ArrayList<String> chinaWebSite = findChineseWebsites(links);
+		
 		log.info("URL :" + urlWithProtocol);
 		log.info("VALID URLS :" + links.size());
+		
 		ArrayList<TagsData> tagsData = new ArrayList<>();
 		String url = null;
 
@@ -157,20 +160,26 @@ public class ReadandProcessUrlsControllers {
 		Iterator<String> iterator = links.iterator();
 		while (iterator.hasNext()) {
 			String URL = iterator.next();
-			URI uri = new URI(URL);
-			String hostName = uri.getHost();
-			hostName = hostName.startsWith("www.") ? hostName.substring(4) : hostName;
-			if (URL.toLowerCase().contains(".zh") || URL.toLowerCase().contains(".ch")
-					|| URL.toLowerCase().contains("zh.") || URL.toLowerCase().contains("ch.")) {
-				chinaWebSite.add(URL);
+			if(URL!=null) {
+				URI uri = new URI(URL);
+				String hostName = uri.getHost();
+				hostName = hostName.startsWith("www.") ? hostName.substring(4) : hostName;
+				if (URL.toLowerCase().contains(".zh") || URL.toLowerCase().contains(".ch")
+						|| URL.toLowerCase().contains("zh.") || URL.toLowerCase().contains("ch.")) {
+					chinaWebSite.add(URL);
+				}
 			}
 		}
 		return chinaWebSite;
 	}
 
 	public HashSet<String> getPageLinks(String URL, int depth, String parentUrl, HashSet<String> links) {
-
 		if (URL.length() > 0) {
+			int indexOfParam = StringUtils.ordinalIndexOf(URL, "/", 4);
+			if(indexOfParam > 0 ) {
+				URL = URL.substring(0,indexOfParam);
+			}
+		
 			URI uri = null;
 			try {
 				URL = processURL(URL);
@@ -185,18 +194,19 @@ public class ReadandProcessUrlsControllers {
 				// System.out.println(">> Depth: " + depth + " [" + URL + "]");
 
 				try {
-
-					links.add(URL);
-					if (URL != null && URL.length() > 0) {
-						Document document = Jsoup.connect(URL).timeout(10 * 2000).userAgent("Mozilla").get();
-						Elements linksOnPage = document.select("a[href]");
-
-						depth++;
-						for (Element page : linksOnPage) {
-
-							getPageLinks(page.attr("abs:href"), depth, parentUrl, links);
+						links.add(URL);
+						if (URL != null && URL.length() > 0) {
+							Document document = Jsoup.connect(URL).timeout(10 * 2000).userAgent("Mozilla").get();
+							Elements linksOnPage = document.select("a[href]");
+	
+							depth++;
+							for (Element page : linksOnPage) {
+								if(links.size() < 20) {
+									getPageLinks(page.attr("abs:href"), depth, parentUrl, links);
+								}
+									
+							}
 						}
-					}
 
 				} catch (Exception e) {
 					log.error("For '" + URL + "': " + e.getMessage());
@@ -212,6 +222,7 @@ public class ReadandProcessUrlsControllers {
 			if (link.toString().contains("google")) {
 				googleLinks.add(scrawlerLink);
 				log.error("FOUND GA : " + scrawlerLink);
+				break;
 			}
 		}
 		return googleLinks;

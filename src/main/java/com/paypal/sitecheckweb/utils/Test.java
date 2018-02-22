@@ -8,13 +8,17 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.validator.routines.UrlValidator;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.DataNode;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+
+import ch.qos.logback.core.boolex.Matcher;
 
 public class Test {
 	 private HashSet<String> links;
@@ -50,12 +54,14 @@ public class Test {
 
 	    public static void main(String[] args) throws URISyntaxException, IOException {
 	        //1. Pick a URL from the frontier
-	    	URI uri = new URI("https://zh.opskins.com/");
+	    	URI uri = new URI("https://www.featuresneakerboutique.com/collections/chapter");
+	    	String url = "https://www.featuresneakerboutique.com/";
 	    	String i = "https://npmjs.com/package/@opskins/api";
 	    	String n = uri.getHost();
 	    	n = n.startsWith("www.") ? n.substring(4) : n;
 	    	System.out.println(n);
-	    	System.out.println(i.contains(n));
+	    	System.out.println(StringUtils.ordinalIndexOf(url, "/", 4));
+	    	System.out.println(url.substring(0, 50));
 	    	/*
 	    	 Document doc =Jsoup.connect("https://opskins.com/kb/faq").timeout(10 * 2000).userAgent("Mozilla").get();
 	    	 Elements scriptElements = doc.select("script");
