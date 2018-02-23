@@ -5,17 +5,13 @@ public class TagsData {
 	private String tagName;
 	private boolean isPresent;
 	private String url;
-	
-	
-	
+		
 	public TagsData(String tagName, boolean isPresent, String url) {
 		super();
 		this.tagName = tagName;
 		this.isPresent = isPresent;
 		this.url = url;
 	}
-	
-	
 	
 	public String getTagName() {
 		return tagName;

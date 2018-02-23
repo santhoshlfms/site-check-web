@@ -1,5 +1,7 @@
 package com.paypal.sitecheckweb.dto;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ResultsDto {
@@ -14,6 +16,17 @@ public class ResultsDto {
 		this.listOfInvalidUrl = listOfInvalidUrl;
 		this.siteDto = siteDto;
 	}
+	
+	public ResultsDto(String invalidUrl) {
+		this.listOfInvalidUrl = Arrays.asList(invalidUrl);
+		this.siteDto = new ArrayList<>();
+	}
+	
+	public ResultsDto( SiteDto siteDto) {
+		this.listOfInvalidUrl = new ArrayList<>();
+		this.siteDto = Arrays.asList(siteDto);
+	}
+	
 	public List<String> getListOfInvalidUrl() {
 		return listOfInvalidUrl;
 	}

@@ -1,20 +1,16 @@
 package com.paypal.sitecheckweb.controllers;
 
-import java.io.BufferedWriter;
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.csv.CSVPrinter;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.coyote.http2.ConnectionException;
 import org.apache.log4j.Logger;
@@ -43,146 +39,143 @@ public class ReadandProcessUrlsControllers {
 	public ResultsDto readUrls(@RequestBody InputDataDto data, HttpServletResponse response)
 			throws IOException, ConnectionException, URISyntaxException {
 		String url = data.getUrls();
-		List<String> tagList = new ArrayList(Arrays.asList(data.getTags().split(",[ ]*")));
+		List<String> tagList = new ArrayList<String>(Arrays.asList(data.getTags().split(",[ ]*")));
 		ResultsDto result = crawlData(url, tagList);
 		log.info("RESPONSE SENT");
 		return result;
 	}
 
-	public ResultsDto crawlData(String urlList, List<String> tagList) throws IOException, URISyntaxException {
+	public ResultsDto crawlData(String inputUrl, List<String> tags) throws IOException, URISyntaxException {
 
-		Document doc = null;
-		List<String> listOfInvalidUrl = new ArrayList<>();
-		String url = null;
-		ArrayList<String> chinaWebSite = null;
-		HashMap<String, ArrayList<TagsData>> csvData = new HashMap<String, ArrayList<TagsData>>();
+		SiteDto siteDto = new SiteDto(inputUrl);
+		HashSet<String> links = new HashSet<>();
 
-		// 1. check if url has protocol, if not add http:// as default
-		String urlWithProtocol = checkForProtocol(urlList.trim());
-		// get all links from the site
-		ArrayList<String> googleLinks = null;
-		HashSet<String> totalValidLinks = new HashSet<>();
-		try {
-		HashSet<String> links = getPageLinks(urlWithProtocol, 0, urlWithProtocol, totalValidLinks);
-
-		 chinaWebSite = findChineseWebsites(links);
-		
+		String urlWithProtocol = checkForProtocol(inputUrl.trim());
 		log.info("URL :" + urlWithProtocol);
+
+		links = getPageLinks(urlWithProtocol, 0, urlWithProtocol, links);
+		if (null == links) {
+			return new ResultsDto(urlWithProtocol);
+		}
 		log.info("VALID URLS :" + links.size());
-		
+
+		siteDto.setChinaWebLinks(findChineseWebsites(links));
+		siteDto.setTags(crawlLinksByTags(tags, links));
+		return new ResultsDto(siteDto);
+
+	}
+
+	private ArrayList<TagsData> crawlLinksByTags(List<String> tags, HashSet<String> links)
+			throws URISyntaxException, IOException {
+
+		boolean googleLinkFound = false;
 		ArrayList<TagsData> tagsData = new ArrayList<>();
-		
 
-		// 2. connect via jsoup and crawl data
-		
-			Iterator<String> it = links.iterator();
-			while (it.hasNext()) {
-				if (tagList.size() == 0) {
-					break;
-				}
-				url = it.next();
-				doc = Jsoup.connect(url).timeout(10 * 2000).userAgent("Mozilla").get();
-				// 3. url is valid and connected with jsoup now find the tags in dom
-				Elements findPayPalKeyWord = doc.select("body");
-				Elements linksOnPage = doc.select("script");
-				// 4. find google analytics
-				googleLinks = checkForAnalytics(url, linksOnPage);
+		Iterator<String> it = links.iterator();
+		while (it.hasNext()) {
+			if (tags.isEmpty() && googleLinkFound) {
+				break;
+			}
+			String url = it.next();
+			googleLinkFound = crawlLinkByTags(tags, tagsData, url, googleLinkFound);
+		}
 
-				String convertedNodes = findPayPalKeyWord.toString();
-				convertedNodes = convertedNodes.toLowerCase();
+		processTagsNotFound(tags, tagsData);
 
-				// 4. finding if the above string has mentioned tags !
-				List<String> itemToRemove = new ArrayList<String>();
+		return tagsData;
 
-				for (String tag : tagList) {
-					tag = tag.toLowerCase();
-					boolean isFound = convertedNodes.indexOf(tag) > -1;
-					if (isFound) {
-						log.info(" ** Found tag - " + tag + " in :" + url);
-						itemToRemove.add(tag);
-						TagsData tagdata = new TagsData(tag, isFound, url);
-						tagsData.add(tagdata);
+	}
 
-					} else {
-						log.info("Not able to find " + tag + " in :" + url);
-					}
+	private boolean crawlLinkByTags(List<String> tags, ArrayList<TagsData> tagsData, String url,
+			boolean googleLinkFound) {
+		try {
+			Document doc = Jsoup.connect(url).timeout(10 * 2000).userAgent("Mozilla").get();
 
-				}
-
-				tagList.removeAll(itemToRemove);
+			if (!googleLinkFound) {
+				googleLinkFound = findGoogleLink(tagsData, url, doc);
 			}
 
-			if (tagList.size() > 0) {
-				for (String tag : tagList) {
-					TagsData tagdata = new TagsData(tag, false, "");
-					tagsData.add(tagdata);
-				}
-
+			if (!tags.isEmpty()) {
+				List<String> tagsFound = findTags(tags, tagsData, url, doc);
+				tags.removeAll(tagsFound);
 			}
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return googleLinkFound;
+	}
 
-			if (googleLinks.size() > 0) {
-				TagsData tagdata = new TagsData("Google API", true, Arrays.toString(googleLinks.toArray()));
+	private void processTagsNotFound(List<String> tags, ArrayList<TagsData> tagsData) {
+		if (!tags.isEmpty()) {
+			for (String tag : tags) {
+				TagsData tagdata = new TagsData(tag, false, "");
+				tagsData.add(tagdata);
+			}
+		}
+	}
+
+	private List<String> findTags(List<String> tags, ArrayList<TagsData> tagsData, String url, Document doc) {
+		List<String> tagsFound = new ArrayList<String>();
+		String body = doc.select("body").toString().toLowerCase();
+
+		for (String tag : tags) {
+			tag = tag.toLowerCase();
+			boolean isFound = body.indexOf(tag) > -1;
+			if (isFound) {
+				log.info(" ** Found tag - " + tag + " in :" + url);
+				tagsFound.add(tag);
+				TagsData tagdata = new TagsData(tag, isFound, url);
 				tagsData.add(tagdata);
 
+			} else {
+				log.info("Not able to find " + tag + " in :" + url);
 			}
 
-			csvData.put(urlWithProtocol, tagsData);
-
-		} catch (Exception e) {
-			//if (urlWithProtocol.equals(url)) {
-				listOfInvalidUrl.add(urlWithProtocol);
-			//}
-
-			// e.printStackTrace();
-			log.info(urlWithProtocol + " Not accessed == " + e.getMessage());
-			// e.printStackTrace();
 		}
 
-		ArrayList<SiteDto> listSiteDto = new ArrayList<>();
-		for (Map.Entry item : csvData.entrySet()) {
-			String _url = (String) item.getKey();
-			@SuppressWarnings("unchecked")
-			ArrayList<TagsData> foundtagsData = (ArrayList<TagsData>) item.getValue();
-			SiteDto siteDto = new SiteDto(_url, foundtagsData, chinaWebSite);
-			listSiteDto.add(siteDto);
+		return tagsFound;
+	}
 
+	private boolean findGoogleLink(ArrayList<TagsData> tagsData, String url, Document doc) {
+		Elements scripts = doc.select("script");
+		String googleLink = getAnalyticsLink(url, scripts);
+		if (null != googleLink) {
+			TagsData tagdata = new TagsData("Google API", true, googleLink);
+			tagsData.add(tagdata);
+			return true;
 		}
-		// csvPrinter.flush();
-		ResultsDto dto = new ResultsDto(listOfInvalidUrl, listSiteDto);
-		return dto;
-
+		return false;
 	}
 
-	private void writeToCsv(BufferedWriter writer, CSVPrinter csvPrinter, String url, String tagName, String tagValue)
-			throws IOException {
-		csvPrinter.printRecord(url, tagName, tagValue);
-	}
-
-	public ArrayList<String> findChineseWebsites(HashSet<String> links) throws URISyntaxException {
+	private ArrayList<String> findChineseWebsites(HashSet<String> links) throws URISyntaxException {
 		ArrayList<String> chinaWebSite = new ArrayList<>();
 		Iterator<String> iterator = links.iterator();
 		while (iterator.hasNext()) {
 			String URL = iterator.next();
-			if(URL!=null) {
-				URI uri = new URI(URL);
+			if (URL != null) {
+				URI uri;
+				uri = new URI(URL);
 				String hostName = uri.getHost();
-				hostName = hostName.startsWith("www.") ? hostName.substring(4) : hostName;
-				if (URL.toLowerCase().contains(".zh") || URL.toLowerCase().contains(".ch")
-						|| URL.toLowerCase().contains("zh.") || URL.toLowerCase().contains("ch.")) {
-					chinaWebSite.add(URL);
+				if (hostName != null) {
+					hostName = hostName.startsWith("www.") ? hostName.substring(4) : hostName;
+					if (URL.toLowerCase().contains(".zh") || URL.toLowerCase().contains(".ch")
+							|| URL.toLowerCase().contains("zh.") || URL.toLowerCase().contains("ch.")) {
+						chinaWebSite.add(URL);
+					}
 				}
 			}
 		}
 		return chinaWebSite;
 	}
 
-	public HashSet<String> getPageLinks(String URL, int depth, String parentUrl, HashSet<String> links) throws Exception  {
+	private HashSet<String> getPageLinks(String URL, int depth, String parentUrl, HashSet<String> links) {
 		if (URL.length() > 0) {
 			int indexOfParam = StringUtils.ordinalIndexOf(URL, "/", 4);
-			if(indexOfParam > 0 ) {
-				URL = URL.substring(0,indexOfParam);
+			if (indexOfParam > 0) {
+				URL = URL.substring(0, indexOfParam);
 			}
-		
+
 			URI uri = null;
 			try {
 				URL = processURL(URL);
@@ -197,39 +190,38 @@ public class ReadandProcessUrlsControllers {
 				// System.out.println(">> Depth: " + depth + " [" + URL + "]");
 
 				try {
-						links.add(URL);
-						if (URL != null && URL.length() > 0) {
-							Document document = Jsoup.connect(URL).timeout(10 * 2000).userAgent("Mozilla").get();
-							Elements linksOnPage = document.select("a[href]");
-	
-							depth++;
-							for (Element page : linksOnPage) {
-								if(links.size() < 20) {
-									getPageLinks(page.attr("abs:href"), depth, parentUrl, links);
-								}
-									
+					links.add(URL);
+					if (URL != null && URL.length() > 0) {
+						Document document = Jsoup.connect(URL).timeout(20 * 1000).userAgent("Mozilla").get();
+						Elements linksOnPage = document.select("a[href]");
+
+						depth++;
+						for (Element page : linksOnPage) {
+							if (links.size() < 20) {
+								getPageLinks(page.attr("abs:href"), depth, parentUrl, links);
 							}
+
 						}
+					}
 
 				} catch (Exception e) {
 					log.error("For '" + URL + "': " + e.getMessage());
-					throw e;
+					if (depth == 0) {
+						return null;
+					}
 				}
 			}
 		}
 		return links;
 	}
 
-	public ArrayList<String> checkForAnalytics(String scrawlerLink, Elements linksOnPage) {
-		ArrayList<String> googleLinks = new ArrayList<>();
-		for (Element link : linksOnPage) {
+	private String getAnalyticsLink(String url, Elements scripts) {
+		for (Element link : scripts) {
 			if (link.toString().contains("google")) {
-				googleLinks.add(scrawlerLink);
-				log.error("FOUND GA : " + scrawlerLink);
-				break;
+				return link.absUrl("src");
 			}
 		}
-		return googleLinks;
+		return null;
 	}
 
 	private String checkForProtocol(String url) {
@@ -242,7 +234,7 @@ public class ReadandProcessUrlsControllers {
 		}
 	}
 
-	public String processURL(String theURL) {
+	private String processURL(String theURL) {
 		int endPos;
 		if (theURL.indexOf("?") > 0) {
 			endPos = theURL.indexOf("?");
@@ -253,18 +245,5 @@ public class ReadandProcessUrlsControllers {
 		}
 		return theURL.substring(0, endPos);
 	}
-
-	/*
-	 * @RequestMapping(value="/download-csv", method=RequestMethod.POST) public
-	 * ResponseEntity<Resource> download() throws IOException { File file = new
-	 * File(outputPath); Path path = Paths.get(file.getAbsolutePath());
-	 * ByteArrayResource resource = new ByteArrayResource(Files.readAllBytes(path));
-	 * HttpHeaders headers = new HttpHeaders();
-	 * headers.add(HttpHeaders.CONTENT_DISPOSITION,
-	 * "attachment; filename=output.csv"); return ResponseEntity.ok()
-	 * .headers(headers) .contentLength(file.length())
-	 * .contentType(MediaType.parseMediaType("application/octet-stream"))
-	 * .body(resource); }
-	 */
 
 }

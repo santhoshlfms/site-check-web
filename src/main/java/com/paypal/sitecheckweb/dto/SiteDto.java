@@ -9,6 +9,9 @@ public class SiteDto {
 	private ArrayList<TagsData> tags;
 	private ArrayList<String> chinaWebLinks;
 
+	public SiteDto(String siteName) {
+		this.siteName = siteName;
+	}
 	
 	public SiteDto(String siteName, ArrayList<TagsData> tags, ArrayList<String> chinaWebLinks) {
 		super();
@@ -16,8 +19,7 @@ public class SiteDto {
 		this.tags = tags;
 		this.setChinaWebLinks(chinaWebLinks);
 	}
-	
-	
+		
 	public String getSiteName() {
 		return siteName;
 	}
