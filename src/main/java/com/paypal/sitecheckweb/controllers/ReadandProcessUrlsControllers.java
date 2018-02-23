@@ -165,7 +165,6 @@ public class ReadandProcessUrlsControllers {
 						}
 					}
 				} catch (Exception e) {
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}
