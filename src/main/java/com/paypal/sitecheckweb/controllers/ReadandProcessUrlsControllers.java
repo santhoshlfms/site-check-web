@@ -148,21 +148,25 @@ public class ReadandProcessUrlsControllers {
 		return false;
 	}
 
-	private ArrayList<String> findChineseWebsites(HashSet<String> links) throws URISyntaxException {
+	private ArrayList<String> findChineseWebsites(HashSet<String> links) {
 		ArrayList<String> chinaWebSite = new ArrayList<>();
 		Iterator<String> iterator = links.iterator();
 		while (iterator.hasNext()) {
 			String URL = iterator.next();
 			if (URL != null) {
-				URI uri;
-				uri = new URI(URL);
-				String hostName = uri.getHost();
-				if (hostName != null) {
-					hostName = hostName.startsWith("www.") ? hostName.substring(4) : hostName;
-					if (URL.toLowerCase().contains(".zh") || URL.toLowerCase().contains(".ch")
-							|| URL.toLowerCase().contains("zh.") || URL.toLowerCase().contains("ch.")) {
-						chinaWebSite.add(URL);
+				try {
+					URI uri = new URI(URL);
+					String hostName = uri.getHost();
+					if (hostName != null) {
+						hostName = hostName.startsWith("www.") ? hostName.substring(4) : hostName;
+						if (URL.toLowerCase().contains(".zh") || URL.toLowerCase().contains(".ch")
+								|| URL.toLowerCase().contains("zh.") || URL.toLowerCase().contains("ch.")) {
+							chinaWebSite.add(URL);
+						}
 					}
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
 		}
